@@ -5,9 +5,7 @@ using UnityEngine;
 public class DoorSet : MonoBehaviour
 {
     public bool doorState = true;
-    private void Start() {
-        GameEvents.current.onDoorTrigger +=  onDoorAction;
-    }
+
     private void onDoorAction() {
         if(doorState == true){
             //Open Door: gameObject.SetActive(false);
@@ -19,6 +17,19 @@ public class DoorSet : MonoBehaviour
             doorState = true;
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+     {
+        if(collision.gameObject.CompareTag("Player")){
+            GameEvents.current.onDialogueTrigger +=  onDoorAction;
+        }
+     }
+     private void OnTriggerExit2D(Collider2D collision)
+     {
+        if(collision.gameObject.CompareTag("Player")){
+            GameEvents.current.onDialogueTrigger -=  onDoorAction;
+        }
+     }
 
 
 }

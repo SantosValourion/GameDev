@@ -6,7 +6,6 @@ using UnityEngine;
 public class GameEvents : MonoBehaviour
 {
     public static GameEvents current;
-
     private void Awake(){
         current = this;
     }
@@ -20,10 +19,10 @@ public class GameEvents : MonoBehaviour
     }
 
     //Dialog Event
-    public event Action onDialogTrigger;
-    public void DialogTrigger() {
-        if(onDialogTrigger != null){
-            onDialogTrigger();
+    public event Action onDialogueTrigger;
+    public void DialogueTrigger() {
+        if(onDialogueTrigger != null){
+            onDialogueTrigger();
         }
     }
 }

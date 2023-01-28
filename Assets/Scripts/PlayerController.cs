@@ -6,17 +6,13 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 1f;
+    public float moveSpeed = 0.5f;
     public float collisionOffset = 0.05f;
-    public float reach = 250f;
     public ContactFilter2D movementFilter;
     Vector2 movementInput;
     Rigidbody2D rb;
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
-    private GameObject nearistObject = null;
-    private Collider2D[] objects;
-
-    // Start is called before the first frame update
+    private List<GameObject> objectsList = new List<GameObject>();
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -36,17 +32,25 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    private GameObject getClosest(Vector2 origin, float range){
-        objects = Physics2D.OverlapCircleAll(origin, range);
-        foreach(Collider2D obj in objects){
-           if(obj.tag != "Untagged" && obj.tag != "Player"){
-                return obj.gameObject;
-           }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Door")){
+            objectsList.Add(collision.gameObject);
         }
-        return null;
+        if(collision.gameObject.CompareTag("NPC")){
+            objectsList.Add(collision.gameObject);
+        }
     }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Door")){
+            objectsList.Remove(collision.gameObject);
+        }
+        if(collision.gameObject.CompareTag("NPC")){
+            objectsList.Remove(collision.gameObject);
+        }
+    }
     private bool TryMove(Vector2 direction)
     {
         int count = rb.Cast(
@@ -69,20 +73,19 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnInteract(){
-        nearistObject = getClosest(rb.position, reach);
-        Array.Clear(objects, 0, objects.Length);
-        if(nearistObject != null){
-            switch(nearistObject.tag){
-                case "Door":
-                    GameEvents.current.DoorTrigger();
-                    break;
-                case "NPC":
-                    GameEvents.current.DialogTrigger();
-                    break;
-                default:
-                    break;
+    Debug.Log(objectsList.Count);
+    if(objectsList.Count != 0){
+        GameObject first = objectsList[0];
+        switch(first.tag){
+            case "Door":
+                GameEvents.current.DoorTrigger();
+                break;
+            case "NPC":
+                GameEvents.current.DialogueTrigger();
+                break;
+            default:
+                break;
             }
         }
-        nearistObject = null;
     }
 }
