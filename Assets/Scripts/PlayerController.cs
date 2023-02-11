@@ -73,7 +73,6 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnInteract(){
-    Debug.Log(objectsList.Count);
     if(objectsList.Count != 0){
         GameObject first = objectsList[0];
         switch(first.tag){

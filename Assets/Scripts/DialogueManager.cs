@@ -4,38 +4,26 @@ using UnityEngine;
 
 public class DialogueManager : MonoBehaviour
 {
-    private Queue<string> sentences;
-    void Start()
+    private Queue<string> sentences = new Queue<string>();
+
+    private string Name; 
+    public void StartDialogue (string name, Queue<string> dialogue)
     {
-        sentences = new Queue<string>();
+        sentences = dialogue;
+        Name = name;
+        printDialogue();
     }
 
-    public void StartDialogue (Dialogue dialogue)
-    {
-        Debug.Log("Starting conversation with " + dialogue.name);
-        
-        sentences.Clear();
-
-        foreach(string sentence in dialogue.sentences) 
+    public void printDialogue(){
+        if(sentences.Count == 0 || sentences.Peek().Contains("ENDQUEUE"))
         {
-            sentences.Enqueue(sentence);
+            sentences.Dequeue();
+            endDialogue();
+        } else {
+            Debug.Log(sentences.Dequeue());
         }
-        DisplayNextSentence();
     }
-
-    public void DisplayNextSentence()
-    {
-        if(sentences.Count == 0)
-        {
-            EndDialogue();
-            return;
-        }
-
-        string sen = sentences.Dequeue();
-        Debug.Log(sen);
-    }
-
-    public void EndDialogue()
+    public void endDialogue()
     {
         Debug.Log("End of Conversation");
     }

@@ -1,0 +1,14 @@
+[0]
+Hello
+I am Tempman
+This is a Test File!
+Goodbye!
+{1}
+
+[1]
+Second Dialogue!
+{2}
+
+[2]
+Hi Nerd!
+{3}
